@@ -1,0 +1,7 @@
+build
+dist
+cmdline_pywatch.egg-info
+
+.DS_Store
+*.pyc
+*.swp
