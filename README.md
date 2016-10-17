@@ -2,7 +2,12 @@
 
 1. Install with 
 
-```sudo python setup.py install```
+```
+sudo pip install watchdog
+git clone https://github.com/dgmp88/pywatch
+cd pywatch
+sudo python setup.py install
+```
 
 2. Run with
 
