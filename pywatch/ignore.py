@@ -17,7 +17,7 @@ try:
                 line = './%s*' % line
                 gitignore_contents.append(line)
 except IOError:
-    print 'No .gitignore file found'
+    print('No .gitignore file found')
 
 
 # Manually add some stuff
@@ -35,4 +35,5 @@ def do_ignore(path):
         if fnmatch(path, i):
             ignore = True
             break
+    print('ignore:', ignore, path)
     return ignore

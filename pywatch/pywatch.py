@@ -35,14 +35,15 @@ def restart(cmd):
     stop()
     time.sleep(0.1)
     start(cmd)
-    print 'restarted'
+    print('restarted')
 
 def main():
+    print(sys.argv)
     if len(sys.argv) < 2:
-        print 'Usage: pywatch "runcmd"'
+        print('Usage: pywatch "runcmd"')
         raise Exception
     cmd = sys.argv[1]
-    
+
     # Setup watchdog
     observer = Observer()
     event_handler = MyHandler()
