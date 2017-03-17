@@ -15,11 +15,20 @@ restart_wait = 0.5 # in seconds
 class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
         global last_modified
-        if event.is_directory:
-            return
-        if not ignore.do_ignore(event.src_path):
-            print event.src_path
+        src_path = event.src_path
+        if event.is_directory and sys.platform == 'darwin':
+            # On OSX, we need to do this annoyingly
+            src_path = self.check_event_files(event)
+
+        if src_path and not ignore.do_ignore(src_path):
             last_modified = time.time()
+
+    def check_event_files(self, event):
+        files_in_dir = [event.src_path+"/"+f for f in os.listdir(event.src_path)]
+        if len(files_in_dir) > 0:
+            return max(files_in_dir, key=os.path.getmtime)
+        else:
+            return None
 
 # Whatever the restart function needs to be
 def restart(cmd):
