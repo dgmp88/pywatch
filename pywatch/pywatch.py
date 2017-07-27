@@ -27,7 +27,8 @@ class MyHandler(FileSystemEventHandler):
 
 
     def check_event_files(self, event):
-        files_in_dir = [event.src_path+"/"+f for f in os.listdir(event.src_path)]
+        files_in_dir = self.get_files_in_dir(event)
+
         files_in_dir = filter(lambda x: ignore.do_ignore(x) ==False, files_in_dir)
         files_in_dir = filter(lambda x: os.path.getmtime(x) > start_time, files_in_dir)
         files_in_dir = filter(lambda x: os.path.isdir(x) == False, files_in_dir)
@@ -36,6 +37,20 @@ class MyHandler(FileSystemEventHandler):
             return max(files_in_dir, key=os.path.getmtime)
         else:
             return None
+
+    def get_files_in_dir(self, event):
+        # This seems to crash sometimes, try to catch it
+        i = 0
+        err = None
+        while i < 3:
+            try:
+                return [event.src_path+"/"+f for f in os.listdir(event.src_path)]
+            except OSError as error:
+                err = error
+                time.sleep(0.2)
+            i += 1
+        raise err
+
 
 # Whatever the restart function needs to be
 def restart(cmd):
