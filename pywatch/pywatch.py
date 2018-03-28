@@ -29,13 +29,13 @@ class MyHandler(FileSystemEventHandler):
             last_modified = time.time()
             file_changed = src_path
 
-
     def check_event_files(self, event):
         files_in_dir = self.get_files_in_dir(event)
 
-        files_in_dir = filter(lambda x: ignore.do_ignore(x) ==False, files_in_dir)
-        files_in_dir = filter(lambda x: os.path.getmtime(x) > start_time, files_in_dir)
-        files_in_dir = filter(lambda x: os.path.isdir(x) == False, files_in_dir)
+        files_in_dir = [f for f in files_in_dir if not ignore.do_ignore(f)]
+        files_in_dir = [
+            f for f in files_in_dir if os.path.getmtime(f) > start_time]
+        files_in_dir = [f for f in files_in_dir if not os.path.isdir(f)]
 
         if len(files_in_dir) > 0:
             return max(files_in_dir, key=os.path.getmtime)
