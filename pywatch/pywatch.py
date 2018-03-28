@@ -1,18 +1,22 @@
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-import time
-from handle_process import start, stop
-import ignore
-import sys
 import os
+import sys
+import time
+
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
+from . import ignore
+from .handle_process import start, stop
 
 # Global variables
 last_modified = 0
 start_time = time.time()
 file_changed = ''
-restart_wait = 0.5 # in seconds
+restart_wait = 0.5  # in seconds
 
 # Simple class that reacts to changes
+
+
 class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
         global last_modified, file_changed
@@ -59,6 +63,7 @@ def restart(cmd):
     start(cmd)
     print('%s changed, restarted' % (file_changed))
 
+
 def main():
     if len(sys.argv) < 2:
         print('Usage: pywatch "runcmd"')
@@ -87,6 +92,7 @@ def main():
         observer.stop()
         stop()
     observer.join()
+
 
 if __name__ == '__main__':
     main()
